@@ -1,10 +1,11 @@
 import re
+from PIL import Image
 import collections
 import wordcloud
-import numpy as np
 from matplotlib import pyplot as plt
+import numpy as np
 
-def text_cleaner(text, uninteresting_words={"a", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"} # The uninteresting words are: articles, conjunctions, prepositions and pronouns. 
+def text_cleaner(text, uninteresting_words={"a", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"} # The uninteresting words are: articles, conjunctions, prepositions and pronouns. 
 ):
     lower_cased_text = text.lower()
 
@@ -45,17 +46,17 @@ raw_text = source_file.read()
 
 clean_text = text_cleaner(raw_text)
 
-print(clean_text)
-
 counted_words = word_counter(clean_text)
 
-cloud = wordcloud.WordCloud()
+maya_coloring = np.array(Image.open("F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder/image masks/maya.jpg"))
+
+cloud = wordcloud.WordCloud(background_color="white", mask=maya_coloring, width=1920, height=1920, font_path="F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder/fonts/minimal.otf")
 cloud.generate_from_frequencies(counted_words)
 
+image_colors = wordcloud.ImageColorGenerator(maya_coloring)
 
 myimage = cloud.to_array()
-plt.imshow(myimage, interpolation = 'nearest')
+plt.imshow(myimage, interpolation = 'bilinear')
+plt.imshow(cloud.recolor(color_func=image_colors), interpolation="bilinear")
 plt.axis('off')
 plt.show()
-
-print(counted_words)
