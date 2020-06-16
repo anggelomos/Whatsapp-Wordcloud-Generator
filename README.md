@@ -1,2 +1,2 @@
 # Wordcloud-feeder
-Python script that takes raw text and makes a dictionary counting how many times each word appears
+Python script that takes a whatsapp chat extract the most common words used by each contact and plots that into a wordcloud where each person's words have a different color.
