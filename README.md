@@ -1,2 +1,2 @@
 # Wordcloud-feeder
-Python script that takes a whatsapp chat extract the most common words used by each contact and plots that into a wordcloud where each person's words have a different color.
+Python script that extracts the most common words used by each contact in a a whatsapp chat and plots them in a wordcloud where each person's words have a different color.
