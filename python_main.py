@@ -97,10 +97,8 @@ def text_cleaner(text, chat_members, uninteresting_words={"a", "pm", "was", "at"
             if word in processed_words:
                 pass
             else:
-                try:
+                if current_key is not None:
                     color_groups[current_key].append(word)
-                except KeyError:
-                    pass
                     #print("key is none")
 
         processed_words.add(word)
@@ -138,7 +136,7 @@ mask_image = np.array(Image.open("F:/Coding/IT Automation Specialization - Cours
 
 # And finally here we generate the wordcloud using the wordcloud class
 
-cloud = wordcloud.WordCloud(background_color="white", mask=mask_image, max_words = 300, max_font_size=100, min_font_size=20, width=1920, height=1920, font_path="F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder -master/fonts/minimal.otf")
+cloud = wordcloud.WordCloud(background_color="white", mask=mask_image, max_words = 300, max_font_size=60, min_font_size=10, width=1920, height=1920, font_path="F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder -master/fonts/minimal.otf")
 cloud.generate_from_frequencies(counted_words)
 
 #image_colors = wordcloud.ImageColorGenerator(maya_coloring)
@@ -150,6 +148,5 @@ plt.figure(figsize=(27, 15), dpi=72)
 plt.imshow(myimage, interpolation = 'bilinear')
 plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
 plt.axis('off')
-plt.savefig("test2png.png", dpi=100)
 plt.show()
 
