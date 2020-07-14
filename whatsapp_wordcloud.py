@@ -55,7 +55,18 @@ uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", 
 
 
 def _punctuation_cleaner(word_list):
-    """ Delete punctuation symbols in each word of a list and return a list with the cleaned words """
+    """Delete punctuation symbols in each word of a list
+
+    Parameters
+    ----------
+    word_list : list(str)
+        List containing all the words that will be cleaned separately
+
+    Returns
+    -------
+    cleaned_words: list(srt)
+        List containing all the words without punctuation symbols.
+    """
 
     cleaned_words = []
 
@@ -70,18 +81,15 @@ def _punctuation_cleaner(word_list):
 
     return cleaned_words
 
-def text_cleaner(text, chat_members, uninteresting_words=uninteresting_words_en): # The uninteresting words are: articles, conjunctions, prepositions and pronouns. 
+def text_cleaner(text, uninteresting_words=uninteresting_words_en): 
+    """ Delete punctuation symbols, uninteresting words (articles, conjunctions, prepositions, pronouns, etc.) and returns  """
 
-    """  """
     lower_cased_text = text.lower()
     splitted_text = lower_cased_text.split()    # Here we crerate a list with the words that are separated by a space
 
     cleaned_text = _punctuation_cleaner(splitted_text)
     
-
-    # Here we delete unwanted elements from a list using list comprehensions
-
-    final_text = [element for element in cleaned_text if element not in uninteresting_words]
+    final_text = [element for element in cleaned_text if element not in uninteresting_words]    # Here we delete the uninteresting words from the cleaned using list comprehensions
 
     contact_names = []
 
