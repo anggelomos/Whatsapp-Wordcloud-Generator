@@ -1,1 +1,3 @@
-./vscode
+/.vscode
+/__pycache__
+/whatsapp_wordlcloud_generator.egg-info
