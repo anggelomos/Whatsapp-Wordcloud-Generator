@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
+import subprocess
+
+subprocess.run(["pip3", "install", "-e", "."]) # Installs all the required modules in the setup.py (wordcloud, pillow, matplotlib and numpy)
 
 import sys
 import re
 import os
 import collections
+import wordcloud
 from PIL import Image
 from matplotlib import pyplot as plt
 import numpy as np
-
-try:
-    import wordcloud
-except ModuleNotFoundError:
-    try:
-        os.system("pip install numpy")
-    except:
-        os.system("pip3 install numpy")
-else:
-    print("You don't have the wordcloud module installed, please install it using 'pip install wordcloud' or 'pip3 install wordcloud' and run the script again")
 
 class GroupedColorFunc(object):
     """Create a color function object which assigns DIFFERENT SHADES of
@@ -58,10 +52,6 @@ class GroupedColorFunc(object):
 uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
 uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
-if sys.argv[1] == "es":
-    uninteresting_words = uninteresting_words_es
-else:
-    uninteresting_words = uninteresting_words_en
 
 def text_cleaner(text, chat_members, uninteresting_words=uninteresting_words_en): # The uninteresting words are: articles, conjunctions, prepositions and pronouns. 
 
