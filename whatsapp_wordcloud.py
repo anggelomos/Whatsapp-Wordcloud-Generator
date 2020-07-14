@@ -53,28 +53,30 @@ uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although
 uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
 
+def _punctuation_cleaner(word_list):
+    """ Delete punctuation symbols in each word of a list and return a list with the cleaned words """
+
+    cleaned_words = []
+
+    for word in word_list:
+        if word.isalpha():
+            cleaned_words.append(word)
+        else:
+            cleaned_word = re.sub(r"/[$-/:-?{-~!\"^_`\[\]]/", "", word)     # Here we delete the punctuation symbols of each word using the re.sub() function
+            # after cleaning the word we check if it actually got cleaned if it didn't it gets discarted
+            if cleaned_word.isalpha():
+                cleaned_words.append(cleaned_word)
+
+    return cleaned_words
+
 def text_cleaner(text, chat_members, uninteresting_words=uninteresting_words_en): # The uninteresting words are: articles, conjunctions, prepositions and pronouns. 
 
     """  """
     lower_cased_text = text.lower()
-
     splitted_text = lower_cased_text.split()    # Here we crerate a list with the words that are separated by a space
 
-    # Here we delete the punctuation symbols of each word using the re.sub() function
-
-    punctuation_symbols = ["'", ":", ",", "--", "_", "\...", "¡", "!", "\.", "-", "(", ")", "¿", "\?", "\"", "\;"] # Some of the symbols have a backslash (\) before because they caused an error with the re.sub() function without it
-
-    cleaned_text = []
-
-    for word in splitted_text:
-        if word.isalpha():
-            cleaned_text.append(word)
-        else:
-            cleaned_word = re.sub("|".join(punctuation_symbols), "", word)
-            
-            # after cleaning the word we check if it actually got cleaned if it didn't it gets discarted
-            if cleaned_word.isalpha():
-                cleaned_text.append(cleaned_word)
+    cleaned_text = _punctuation_cleaner(splitted_text)
+    
 
     # Here we delete unwanted elements from a list using list comprehensions
 
