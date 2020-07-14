@@ -13,9 +13,10 @@ if you want to generate your wordcloud you have to follow this steps:
 
 2. If you want to use a personalized font, store it in the "font" folder, it can be an .otf or .ttf file (the script will use the first font it founds in the folder ordered alphabetically)
 
-3. If you want to fit the words to an image, store the images in the "image masks" folder, the script will use the first image to mask the first conversation, the second with the second one and so on, if there aren't enough masks it will generate standard square wordclouds.
+3. If you want to fit the words to an image, store the images in the "image masks" folder (the words will fit into the colored regions therefore the background has to be white), the script will use the first image to mask the first conversation, the second with the second one and so on, if there aren't enough masks it will generate standard square wordclouds.
 
 4. Execute the file whatsapp_wordcloud.py
+('python whatsapp_wordcloud.py' or 'python3 whatsapp_wordcloud.py' or './whatsapp_wordcloud.py')
 
 ## License
 Whatsapp Wordcloud Generator is released under the MIT license. See LICENSE for details.
