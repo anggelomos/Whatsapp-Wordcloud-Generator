@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import subprocess
 
 subprocess.run(["pip3", "install", "-e", "."]) # Installs all the required modules in the setup.py (wordcloud, pillow, matplotlib and numpy)
@@ -62,7 +63,7 @@ def _punctuation_cleaner(word_list):
         if word.isalpha():
             cleaned_words.append(word)
         else:
-            cleaned_word = re.sub(r"/[$-/:-?{-~!\"^_`\[\]]/", "", word)     # Here we delete the punctuation symbols of each word using the re.sub() function
+            cleaned_word = re.sub(r"[\W]", "", word)     # Here we delete the punctuation symbols of each word using a regex pattern and the re.sub() function
             # after cleaning the word we check if it actually got cleaned if it didn't it gets discarted
             if cleaned_word.isalpha():
                 cleaned_words.append(cleaned_word)
@@ -117,6 +118,7 @@ def text_cleaner(text, chat_members, uninteresting_words=uninteresting_words_en)
 
     return final_text, color_groups
 
+
 def word_counter(words_to_count):
     counter = collections.Counter(words_to_count)
     return dict(counter)
@@ -159,4 +161,3 @@ plt.imshow(myimage, interpolation = 'bilinear')
 plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
 plt.axis('off')
 plt.show()
-
