@@ -54,7 +54,7 @@ uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although
 uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
 
-def _punctuation_cleaner(word_list):
+def _punctuation_cleaner(word_list: list) -> list:
     """Delete punctuation symbols in each word of a list
 
     Parameters
@@ -81,17 +81,37 @@ def _punctuation_cleaner(word_list):
 
     return cleaned_words
 
-def text_cleaner(text, uninteresting_words=uninteresting_words_en): 
-    """ Delete punctuation symbols, uninteresting words (articles, conjunctions, prepositions, pronouns, etc.) and returns  """
+
+def text_cleaner(text: str, uninteresting_words: list=uninteresting_words_en) -> list: 
+    """Delete punctuation symbols, uninteresting words (articles, conjunctions, prepositions, pronouns, etc.)
+
+    Parameters
+    ----------
+    text : str
+        The text we want to clean
+    uninteresting_words : list(str)
+        List of the words we want to delete from the text. Ex. "the", "a", "in".
+
+    Returns
+    -------
+    clean_text: list(str)
+        List of every individual word present in the text input without any punctuation symbol and excluding the uninteresting words.
+    """
 
     lower_cased_text = text.lower()
     splitted_text = lower_cased_text.split()    # Here we crerate a list with the words that are separated by a space
 
-    cleaned_text = _punctuation_cleaner(splitted_text)
+    unpunctuated_text = _punctuation_cleaner(splitted_text)
     
-    final_text = [element for element in cleaned_text if element not in uninteresting_words]    # Here we delete the uninteresting words from the cleaned using list comprehensions
+    clean_text = [element for element in unpunctuated_text if element not in uninteresting_words]    # Here we delete the uninteresting words from the cleaned using list comprehensions
 
-    contact_names = []
+    return clean_text
+
+
+
+"""
+
+contact_names = []
 
     for contact in chat_members:
         contact_names.append(contact[0])
@@ -123,8 +143,6 @@ def text_cleaner(text, uninteresting_words=uninteresting_words_en):
         processed_words.add(word)
 
     final_text = [element for element in final_text if element not in contact_names]
-
-    return final_text, color_groups
 
 
 def word_counter(words_to_count):
@@ -169,3 +187,5 @@ plt.imshow(myimage, interpolation = 'bilinear')
 plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
 plt.axis('off')
 plt.show()
+
+"""
