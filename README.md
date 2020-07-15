@@ -8,7 +8,8 @@ if you want to generate your wordcloud you have to follow this steps:
 - open the conversation in your phone
 - click the three dots on the top right of the chat
 - go to "more"
-- click on "export chat" (it will generate the .txt file)
+- click on "export chat"
+- click on "without media" (it will generate the .txt file)
 
 2. If you want to use a personalized font, store it in the "font" folder, it can be an .otf or .ttf file (the script will use the first font it founds in the folder ordered alphabetically)
 
