@@ -60,6 +60,35 @@ class GroupedColorFunc(object):
 uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
 uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
+def contact_text_separator(whatsapp_chat_path: str) -> dict:
+    """Generate a dictionary where the keys are the names of each contact and the values are what they said
+
+    Parameters
+    ----------
+    whatsapp_chat_path : str
+        Path to the .txt file that contains the whatsapp chat.
+
+    Returns
+    -------
+    contact_speech_dictionary: dict
+        Dictionary where the keys are the names of each contact and the values are what they said.
+    """
+    contact_speech_dictionary = {}
+    with open(whatsapp_chat_path, "r", encoding="utf8") as source_file:
+
+        for line in source_file:
+            matched_contact = re.match(r"^\d+/\d+/\d{2}, \d:\d{2} [AP]M - (.*?): (.*)\n", line)    # Match contact name in group 1 and what they said in group 2
+            if matched_contact is not None:
+                # Add contact to dictionary if it isn't there already
+                cotact_name = matched_contact[1]
+                contact_speech = matched_contact[2] + " "
+
+                if cotact_name not in contact_speech_dictionary:
+                    contact_speech_dictionary[cotact_name] = contact_speech
+                else:
+                    contact_speech_dictionary[cotact_name] += contact_speech
+    return contact_speech_dictionary
+
 def _punctuation_cleaner(word_list: list) -> list:
     """Delete punctuation symbols in each word of a list
 
