@@ -7,6 +7,7 @@ try:
     import wordcloud
     from PIL import Image
     from matplotlib import pyplot as plt
+    import matplotlib.patches as mpatches
     import numpy as np
     from bs4 import BeautifulSoup
 except ModuleNotFoundError:
@@ -285,13 +286,16 @@ def main():
         plt.figure(figsize=(10, 5))
         plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
         plt.axis('off')
-        plt.show(block=False)
 
         # Saving images as a .jpg file
         wordcloud_file_name = ""
-        for contact_name in contact_speech_separated.keys():
+        contact_patches = []
+        for contact_name, contact_color in zip(contact_speech_separated, colorgroup):
             wordcloud_file_name += "-"+contact_name
+            contact_patches.append(mpatches.Patch(color=contact_color, label=contact_name))
         
+        plt.legend(handles=contact_patches)
+        plt.show(block=False)
         cloud.to_file(f"wordcloud-chat{wordcloud_file_name}-generated.jpg")
     plt.show()
     
