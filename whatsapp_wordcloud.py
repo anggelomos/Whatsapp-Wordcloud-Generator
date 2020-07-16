@@ -60,10 +60,10 @@ class GroupedColorFunc(object):
     def __call__(self, word, **kwargs):
         return self.get_color_func(word)(word, **kwargs)
 
-uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
-uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
+uninteresting_words_en = {"media", "omitted", "a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
+uninteresting_words_es = {"voy", "anda", "tengo", "hago", "iba", "aquí", "tiene", "tienes", "misma", "cada", "solo", "pasó", "esa", "q", "vez", "ud", "esto", "tal", "ella", "allá", "dió", "soy", "queda", "va", "van", "media", "omitted", "muy", "acá", "mismo", "hiciste", "has", "estuvo", "tuyo", "ah", "da", "ti", "mis", "mi", "tus", "ay", "sus", "su", "aún", "cómo", "donde", "dónde", "vas", "cuál", "estuve", "otras", "ahí", "tuya", "estas", "hubiera", "mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
-uninteresting_words = uninteresting_words_es
+uninteresting_words_list = uninteresting_words_es
 
 def contact_text_separator(whatsapp_chat_path: str) -> dict:
     """Generate a dictionary where the keys are the names of each contact and the values are what they said
@@ -243,86 +243,57 @@ def colorgroup_generator(contact_speech: dict) -> dict:
     colorgroup = {}
     for color_index, text in enumerate(contact_speech.values()):
         color = color_list[color_index]
-        colorgroup[color] = text_cleaner(text, uninteresting_words)
+        colorgroup[color] = text_cleaner(text, uninteresting_words_list)
 
     return colorgroup
 
-"""
-contact_names = []
-
-    for contact in chat_members:
-        contact_names.append(contact[0])
+def main():
+    """ Extract the most common words used by each contact in the whatsapp chats stored in the "whatsapp chats" folder 
+        and plots them in a wordcloud with an optional image mask where each person's words have a different color."""
     
-    def name_to_color(name, contact_names, chat_members):
-        cycle_counter = 0
-        for contact in contact_names:
-            if contact == name:
-                return chat_members[cycle_counter][1]
-            cycle_counter += 1
+    # Captures the needed file paths
+    whatsapp_text_files = file_finder("whatsapp chats", ".txt")
+    font_path = file_finder("font", (".otf", ".ttf"))
+    image_mask_files = file_finder("image masks", (".jpg", ".jpeg"))
+    
+    for file_index, [_, whatsapp_text_path] in enumerate(whatsapp_text_files):
+        contact_speech_separated = contact_text_separator(whatsapp_text_path)
+        colorgroup = colorgroup_generator(contact_speech_separated)
+        counted_words = word_counter(colorgroup)
+        
 
-    processed_words = set([])
-    color_groups = {}
+        grouped_color_func = GroupedColorFunc(colorgroup, default_color="gray")
+        try:
+            image_mask = np.array(Image.open(image_mask_files[file_index][1]))
+        except IndexError:
+            image_mask = None
 
-    for contact in chat_members:
-        color_groups[contact[1]] = []
+        # Generates the wordcloud
+        cloud = wordcloud.WordCloud(background_color="white", 
+                                    mask=image_mask,
+                                    max_words=200,
+                                    max_font_size=None, 
+                                    min_font_size=10, 
+                                    width=1920, 
+                                    height=1920, 
+                                    font_path = font_path[0][1])
 
-    for word in final_text:
-        if word in contact_names:
-            current_key = name_to_color(word, contact_names, chat_members)
-        else:
-            if word in processed_words:
-                pass
-            else:
-                if current_key is not None:
-                    color_groups[current_key].append(word)
-                    #print("key is none")
+        cloud.generate_from_frequencies(counted_words)
 
-        processed_words.add(word)
+        # Prints the image
+        wordcloud_image = cloud.to_array()
+        plt.figure(figsize=(10, 5))
+        plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
+        plt.axis('off')
+        plt.show(block=False)
 
-    final_text = [element for element in final_text if element not in contact_names]
-
-
-def word_counter(words_to_count):
-    counter = collections.Counter(words_to_count)
-    return dict(counter)
-
-# Reading the text file
-
-with open("demo.txt", "r", encoding="utf8") as source_file:
-    raw_text = source_file.read()
-
-default_color = 'grey'
-
-# Here we generate both the list of words cleaned and the dictionary of words assigned to each color
-
-clean_text, color_groups = text_cleaner(raw_text, [["shushis", "#F9C74F"], ["cabrera", "#577590"], ["casta", "#43AA8B"], ["mosquera", "#90BE6D"], ["angelo", "#000000"], ["carlos", "#000000"]], uninteresting_words_es)
-
-# Here we use the color function to transform the dictionary of words assigned to each color into a color function accepted by the wordcloud library
-
-grouped_color_func = GroupedColorFunc(color_groups, default_color)
-
-# Here we create a dictionary where the keys are the words and the value is the amount of times the key is in the text
-
-counted_words = word_counter(clean_text)
-
-# This is a black and white mask, the words fill the black areas
-
-mask_image = np.array(Image.open("F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder -master/image masks/fer.jpg"))
-
-# And finally here we generate the wordcloud using the wordcloud class
-
-cloud = wordcloud.WordCloud(background_color="white", mask=mask_image, max_words = 300, max_font_size=60, min_font_size=10, width=1920, height=1920, font_path="F:/Coding/IT Automation Specialization - Coursera/Python Crash Course/Final project - wordcloud feeder/Wordcloud-feeder -master/fonts/minimal.otf")
-cloud.generate_from_frequencies(counted_words)
-
-#image_colors = wordcloud.ImageColorGenerator(maya_coloring)
-
-# Here we print the final image
-
-myimage = cloud.to_array()
-plt.figure(figsize=(27, 15), dpi=72)
-plt.imshow(myimage, interpolation = 'bilinear')
-plt.imshow(cloud.recolor(color_func=grouped_color_func), interpolation="bilinear")
-plt.axis('off')
-plt.show()
-
-"""
+        # Saving images as a .jpg file
+        wordcloud_file_name = ""
+        for contact_name in contact_speech_separated.keys():
+            wordcloud_file_name += "-"+contact_name
+        
+        cloud.to_file(f"wordcloud-chat{wordcloud_file_name}-generated.jpg")
+    plt.show()
+    
+if __name__ == "__main__":
+    main()
