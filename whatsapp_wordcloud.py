@@ -63,6 +63,8 @@ class GroupedColorFunc(object):
 uninteresting_words_en = {"a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
 uninteresting_words_es = {"mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
+uninteresting_words = uninteresting_words_es
+
 def contact_text_separator(whatsapp_chat_path: str) -> dict:
     """Generate a dictionary where the keys are the names of each contact and the values are what they said
 
@@ -73,7 +75,7 @@ def contact_text_separator(whatsapp_chat_path: str) -> dict:
 
     Returns
     -------
-    contact_speech_dictionary: dict(str)
+    contact_speech_dictionary: dict(list(str))
         Dictionary where the keys are the names of each contact and the values are what they said.
     """
     contact_speech_dictionary = {}
@@ -146,6 +148,7 @@ def text_cleaner(text: str, uninteresting_words: list=uninteresting_words_en) ->
 
 def color_generator(contacts: dict) -> list:
     """Generate a list of HEX color codes extracted from coolors.co pallettes.
+       
        It generates at least as many colors as the amount of contacts.
 
     Parameters
@@ -183,12 +186,12 @@ def file_finder(directory: str, file_extension: Union[str, tuple] = "") -> list:
     ----------
     directory : str
         Directory where you want to get the files.
-    file_extension : Union[str, tuple], optional
+    file_extension : str or tuple(str)
         The file extension or extensions you want to include in your list, by default "" (includes all files)
 
     Returns
     -------
-    file_names: list
+    file_names: list(str,str)
         List containing both the name and the path of each file in the specified directory.
     """
 
@@ -201,17 +204,17 @@ def file_finder(directory: str, file_extension: Union[str, tuple] = "") -> list:
     return file_names
 
 def word_counter(contact_speech: dict) -> dict:
-    """Return a dictionary where each word is a key and the number of ocurrances of the word is the value.
+    """Return a dictionary where each key is a contact name and each value is what they said.
 
     Parameters
     ----------
-    contact_speech : dict
-        Dictionary where each contact name is a key and what they said is the value.
+    contact_speech : dict(str)
+        Dictionary where each key is a contact name and each value is what they said.
 
     Returns
     -------
-    counted_words : dict
-        Dictionary where each word is a key and the number of occurrances of the word is the value.
+    counted_words : dict(int)
+        Dictionary where each key is a word and each value is the number of occurrances of the word.
     """
 
     words_to_count = []
@@ -222,7 +225,27 @@ def word_counter(contact_speech: dict) -> dict:
 
     return dict(counted_words)
 
+def colorgroup_generator(contact_speech: dict) -> dict:
+    """Return a dictionary where the keys are hex color codes and the values are a the list of the words said by each contact cleaned
 
+    Parameters
+    ----------
+    contact_speech : dict(str)
+        Dictionary where each key is a contact name and each value is what they said.
+
+    Returns
+    -------
+    colorgroup : dict(list(str))
+        Dictionary where the keys are hex color codes and the values are a the list of the words said by each contact cleaned
+    """
+    color_list = color_generator(contact_speech)
+
+    colorgroup = {}
+    for color_index, text in enumerate(contact_speech.values()):
+        color = color_list[color_index]
+        colorgroup[color] = text_cleaner(text, uninteresting_words)
+
+    return colorgroup
 
 """
 contact_names = []
