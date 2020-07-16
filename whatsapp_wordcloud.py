@@ -8,6 +8,7 @@ try:
     from PIL import Image
     from matplotlib import pyplot as plt
     import numpy as np
+    from bs4 import BeautifulSoup
 except ModuleNotFoundError:
     try:
         subprocess.run(["pip3", "install", "-e", "."]) # Installs all the required modules in the setup.py (wordcloud, pillow, matplotlib and numpy)
@@ -17,6 +18,7 @@ except ModuleNotFoundError:
 import sys
 import re
 import os
+import random
 import collections
 
 
@@ -70,7 +72,7 @@ def contact_text_separator(whatsapp_chat_path: str) -> dict:
 
     Returns
     -------
-    contact_speech_dictionary: dict
+    contact_speech_dictionary: dict(str)
         Dictionary where the keys are the names of each contact and the values are what they said.
     """
     contact_speech_dictionary = {}
@@ -116,7 +118,6 @@ def _punctuation_cleaner(word_list: list) -> list:
 
     return cleaned_words
 
-
 def text_cleaner(text: str, uninteresting_words: list=uninteresting_words_en) -> list: 
     """Delete punctuation symbols, uninteresting words (articles, conjunctions, prepositions, pronouns, etc.)
 
@@ -141,6 +142,38 @@ def text_cleaner(text: str, uninteresting_words: list=uninteresting_words_en) ->
     clean_text = [element for element in unpunctuated_text if element not in uninteresting_words]    # Here we delete the uninteresting words from the cleaned using list comprehensions
 
     return clean_text
+
+def color_generator(contacts: dict) -> list:
+    """Generate a list of HEX color codes extracted from coolors.co pallettes.
+       It generates at least as many colors as the amount of contacts.
+
+    Parameters
+    ----------
+    contacts : dict(str)
+        Dictionary where the keys are the names of the contacts.
+
+    Returns
+    -------
+    color_pallette : list(str)
+        List of HEX color codes.
+    """
+    amount_contacts = len(contacts)
+
+    # Open a downloaded version of the website coolors.co 
+    with open("font\\coolors.html") as coolors_web_source:
+        web_scrapper = BeautifulSoup(coolors_web_source, 'html.parser')
+
+    pallette_container = web_scrapper.find_all('div', class_="explore-palette_colors")
+
+    color_pallette = []
+    pallette_seed = random.sample(range(46), 45)    # List of random numbers to select a pallete
+    cyc = 0     # cycle counter
+    # In this cycle we add random pallettes until there are more colors than contacts
+    while len(color_pallette) < amount_contacts:
+        color_pallette += ["#"+color.text for color in pallette_container[pallette_seed[cyc]].find_all('span')]     # Add hex colors to the list from a pallette randomly selected from the pallette container
+        cyc += 1
+
+    return color_pallette
 
 
 
