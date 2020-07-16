@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import unittest
+import re
 from whatsapp_wordcloud import _punctuation_cleaner
 from whatsapp_wordcloud import text_cleaner
-from  whatsapp_wordcloud import contact_text_separator
+from whatsapp_wordcloud import contact_text_separator
+from whatsapp_wordcloud import color_generator
 
 class TestWhatsappWordcloud(unittest.TestCase):
 
@@ -19,12 +21,21 @@ class TestWhatsappWordcloud(unittest.TestCase):
 
     def test_contact_text_separtor(self):
         self.maxDiff = None
-
         testcase = "test files\\testfile_01.txt"
         expected = {'contacto 1': "Hola, ¿alguien sabe por qué el sol sale por las mañanas? Interesante, muchas gracias, estuve mucho tiempo buscando la respuesta ",
                     'contacto 2': "Saludos, la respuesta es muy sencilla: Porque hay un momento  del día en el que tiene que ser por la mañana, entonces le toca salir, para ver más información puede entrar a https://elsolsaliohoy.? No hay problema . ",
                     'contacto 3': "Eso es: falso "}
         self.assertEqual(contact_text_separator(testcase), expected)
+
+    def test_color_generator(self):
+        testcase = color_generator({'contact_01': "text",
+                                    'contact_02': "text",
+                                    'contact_03': "text",
+                                    'contact_04': "text"})
+        self.assertGreaterEqual(len(testcase), 4)
+        for case in testcase:
+            self.assertRegex(case,r"^#\w{6}")
+
 
 if __name__ == "__main__":
     unittest.main()
