@@ -8,6 +8,7 @@ from whatsapp_wordcloud import contact_text_separator
 from whatsapp_wordcloud import color_generator
 from whatsapp_wordcloud import file_finder
 from whatsapp_wordcloud import word_counter
+from whatsapp_wordcloud import colorgroup_generator
 
 class TestWhatsappWordcloud(unittest.TestCase):
 
@@ -59,6 +60,17 @@ class TestWhatsappWordcloud(unittest.TestCase):
                     'contact_03': ["bien", "como", "esta", "su", "familia"]}
         expected = {'hola': 2, 'como': 2, 'esta': 2, 'bien': 2, 'y': 1, 'ud': 1, 'su': 1, 'familia': 1}
         self.assertEqual(word_counter(testcase), expected)
+
+    def test_colorgroup_generator(self):
+        testcase = colorgroup_generator({'contact_01': "Hola, rojo fuego",
+                                        'contact_02': "Vida feliz",
+                                        'contact_03': "Gato purpura tierno, fantástico",
+                                        'contact_04': "Intenta dos veces"})
+        expected = [["hola", "rojo", "fuego"], ["vida", "feliz"], ["gato", "purpura", "tierno", "fantástico"], ["intenta", "dos", "veces"]]
+        for case in testcase.keys():
+            self.assertRegex(case,r"^#\w{6}")
+        for index, case in enumerate(testcase.values()):
+            self.assertEqual(case, expected[index])
     
 if __name__ == "__main__":
     unittest.main()
