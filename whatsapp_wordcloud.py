@@ -200,8 +200,31 @@ def file_finder(directory: str, file_extension: Union[str, tuple] = "") -> list:
 
     return file_names
 
-"""
+def word_counter(contact_speech: dict) -> dict:
+    """Return a dictionary where each word is a key and the number of ocurrances of the word is the value.
 
+    Parameters
+    ----------
+    contact_speech : dict
+        Dictionary where each contact name is a key and what they said is the value.
+
+    Returns
+    -------
+    counted_words : dict
+        Dictionary where each word is a key and the number of occurrances of the word is the value.
+    """
+
+    words_to_count = []
+    for words in contact_speech.values():
+        words_to_count += words
+
+    counted_words = collections.Counter(words_to_count)     # Returns a Counter object that contains a dictionary where each word is a key and the number of occurrences are the values
+
+    return dict(counted_words)
+
+
+
+"""
 contact_names = []
 
     for contact in chat_members:
