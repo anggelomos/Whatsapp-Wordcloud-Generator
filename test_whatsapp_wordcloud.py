@@ -7,6 +7,7 @@ from whatsapp_wordcloud import text_cleaner
 from whatsapp_wordcloud import contact_text_separator
 from whatsapp_wordcloud import color_generator
 from whatsapp_wordcloud import file_finder
+from whatsapp_wordcloud import word_counter
 
 class TestWhatsappWordcloud(unittest.TestCase):
 
@@ -51,6 +52,13 @@ class TestWhatsappWordcloud(unittest.TestCase):
         testcase = file_finder("test files\\test_filefinder")
         expected = [["testfile_02.1", "test files\\test_filefinder\\testfile_02.1"],["testfile_03.2", "test files\\test_filefinder\\testfile_03.2"], ["testfile_04.2", "test files\\test_filefinder\\testfile_04.2"], ["testfile_05.3", "test files\\test_filefinder\\testfile_05.3"]]
         self.assertEqual(testcase, expected)
+
+    def test_word_counter(self):
+        testcase = {'contact_01': ["hola", "como", "esta"],
+                    'contact_02': ["hola", "bien", "y", "ud"],
+                    'contact_03': ["bien", "como", "esta", "su", "familia"]}
+        expected = {'hola': 2, 'como': 2, 'esta': 2, 'bien': 2, 'y': 1, 'ud': 1, 'su': 1, 'familia': 1}
+        self.assertEqual(word_counter(testcase), expected)
     
 if __name__ == "__main__":
     unittest.main()
