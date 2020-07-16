@@ -6,6 +6,7 @@ from whatsapp_wordcloud import _punctuation_cleaner
 from whatsapp_wordcloud import text_cleaner
 from whatsapp_wordcloud import contact_text_separator
 from whatsapp_wordcloud import color_generator
+from whatsapp_wordcloud import file_finder
 
 class TestWhatsappWordcloud(unittest.TestCase):
 
@@ -36,7 +37,21 @@ class TestWhatsappWordcloud(unittest.TestCase):
         for case in testcase:
             self.assertRegex(case,r"^#\w{6}")
 
+    def test_file_finder_one_extension(self):
+        testcase = file_finder("test files\\test_filefinder", ".2")
+        expected = [["testfile_03.2", "test files\\test_filefinder\\testfile_03.2"], ["testfile_04.2", "test files\\test_filefinder\\testfile_04.2"]]
+        self.assertEqual(testcase, expected)
 
+    def test_file_finder_multiple_extensions(self):
+        testcase = file_finder("test files\\test_filefinder", (".1", ".3"))
+        expected = [["testfile_02.1", "test files\\test_filefinder\\testfile_02.1"], ["testfile_05.3", "test files\\test_filefinder\\testfile_05.3"]]
+        self.assertEqual(testcase, expected)
+    
+    def test_file_finder_all_extensions(self):
+        testcase = file_finder("test files\\test_filefinder")
+        expected = [["testfile_02.1", "test files\\test_filefinder\\testfile_02.1"],["testfile_03.2", "test files\\test_filefinder\\testfile_03.2"], ["testfile_04.2", "test files\\test_filefinder\\testfile_04.2"], ["testfile_05.3", "test files\\test_filefinder\\testfile_05.3"]]
+        self.assertEqual(testcase, expected)
+    
 if __name__ == "__main__":
     unittest.main()
 
