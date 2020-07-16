@@ -13,6 +13,6 @@ setup(
     license="MIT",
     keywords="whatsapp wordcloud generator",
     packages=find_packages(),
-    install_requires=["wordcloud", "pillow", "matplotlib", "numpy"],
+    install_requires=["wordcloud", "pillow", "matplotlib", "numpy", "BeautifulSoup4"],
     python_requires="~=3.5"
 )
