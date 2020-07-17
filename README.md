@@ -1,22 +1,30 @@
 # Whatsapp-Wordcloud-Generator
-Python script that extracts the most common words used by each contact in a a whatsapp chat and plots them in a wordcloud where each person's words have a different color.
+Python script that extracts the most common words used by each contact in a whatsapp chat and plots them in a wordcloud where each person's words have a different color.
 
 ## Usage
-if you want to generate your wordcloud you have to follow this steps:
+if you want to generate your wordcloud you have to follow these steps:
 
-1. Download your whatsapp conversations and store them in the folder "whatsapp chats" to download your whatsapp conversation:
-- open the conversation in your phone
-- click the three dots on the top right of the chat
-- go to "more"
-- click on "export chat"
-- click on "without media" (it will generate the .txt file)
+1. **Download your whatsapp chats.** To download your whatsapp chats:
+	1. open the chat in your phone
+	2. click the three dots on the top right of the chat
+	3. go to "more"
+	4. click on "export chat"
+	5. click on "without media" (it will generate the .txt file)
 
-2. If you want to use a personalized font, store it in the "font" folder, it can be an .otf or .ttf file (the script will use the first font it founds in the folder ordered alphabetically)
+2. **Save your whatsapp chats in the folder "whatsapp chats".**
 
-3. If you want to fit the words to an image, store the images in the "image masks" folder (the words will fit into the colored regions therefore the background has to be white), the script will use the first image to mask the first conversation, the second with the second one and so on, if there aren't enough masks it will generate standard square wordclouds.
+3. **[Optional]** If you want to use a personalized font (type of letter), **save the font file (.otf or .ttf) in the "font" folder** (the script will use the first font it founds in the folder ordered alphabetically)
 
-4. Execute the file whatsapp_wordcloud.py
-('python whatsapp_wordcloud.py' or 'python3 whatsapp_wordcloud.py' or './whatsapp_wordcloud.py')
+4. **[Optional]** If you want the words to form a shape (see the examples in the "examples" folder) **save the images in .jpg format in the "image masks" folder** (the words will fit into the colored regions therefore the background has to be white). The script will use the first image to mask the first conversation, the second with the second one and so on, if there aren't enough masks it will generate standard square wordclouds.
+
+5. **Execute the file "whatsapp_wordcloud.py"** using python 3.5+ in your favorite IDE or with any of this commands in the terminal:
+	- python whatsapp_wordcloud.py
+	- python3 whatsapp_wordcloud.py
+	- ./whatsapp_wordcloud.py
+
+### and that's it! once the script is finished your wordcloud image files will be in the root directory.
+
+* If you are in Windows you may have the error "Microsft Visual C++14.0 is required" you can download it here: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 ## License
 Whatsapp Wordcloud Generator is released under the MIT license. See LICENSE for details.
