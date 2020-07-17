@@ -83,7 +83,7 @@ def contact_text_separator(whatsapp_chat_path: str) -> dict:
     with open(whatsapp_chat_path, "r", encoding="utf8") as source_file:
 
         for line in source_file:
-            matched_contact = re.match(r"^\d+/\d+/\d{2}, \d:\d{2} [AP]M - (.*?): (.*)\n", line)    # Match contact name in group 1 and what they said in group 2
+            matched_contact = re.match(r"^\d+/\d+/\d{2}, \d+:\d+ .*? - (.*?): (.*)\n?", line)    # Match contact name in group 1 and what they said in group 2
             if matched_contact is not None:
                 # Add contact to dictionary if it isn't there already
                 cotact_name = matched_contact[1]
