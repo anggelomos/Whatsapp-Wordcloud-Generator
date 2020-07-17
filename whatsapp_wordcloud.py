@@ -10,12 +10,12 @@ try:
     import matplotlib.patches as mpatches
     import numpy as np
     from bs4 import BeautifulSoup
-except ModuleNotFoundError:
+except (ModuleNotFoundError, ImportError):
     try:
         print("\nInstalling missing modules (wordcloud, PIL, matplotlib, numpy, beautifulsoup4)...\n")
         subprocess.run(["pip3", "install", "-e", "."]) # Installs all the required modules in the setup.py (wordcloud, pillow, matplotlib, numpy and beautifulsoup4)
     except:
-        print("Some python modules could not be installed, please install them and run the script again. Required Modules: wordcloud, PIL (or pillow), matplotlib, numpy and beautifulsoup4")
+        print("\nSome python modules were not installed automatically, please install them and run the script again.\nRequired Modules: wordcloud, PIL (or pillow), matplotlib, numpy and beautifulsoup4\n\n")
 
 import sys
 import re
@@ -166,7 +166,7 @@ def color_generator(contacts: dict) -> list:
     amount_contacts = len(contacts)
 
     # Open a downloaded version of the website coolors.co 
-    with open("font\\coolors.co") as coolors_web_source:
+    with open(os.path.join("font", "coolors.co")) as coolors_web_source:
         web_scrapper = BeautifulSoup(coolors_web_source, 'html.parser')
 
     pallette_container = web_scrapper.find_all('div', class_="explore-palette_colors")
