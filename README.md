@@ -22,6 +22,10 @@ if you want to generate your wordcloud you have to follow these steps:
 	- python3 whatsapp_wordcloud.py
 	- ./whatsapp_wordcloud.py
 
+### and that's it! once the script is finished your wordcloud image files will be in the root directory.
+
+* If you are in Windows you may have the error "Microsft Visual C++14.0 is required" you can download it here: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
 ## License
 Whatsapp Wordcloud Generator is released under the MIT license. See LICENSE for details.
 
