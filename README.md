@@ -16,6 +16,7 @@ if you want to generate your wordcloud you have to follow these steps:
 3. **[Optional]** If you want to use a personalized font (type of letter), **save the font file (.otf or .ttf) in the "font" folder** (the script will use the first font it founds in the folder ordered alphabetically)
 
 4. **[Optional]** If you want the words to form a shape (see the examples in the "examples" folder) **save the images in .jpg format in the "image masks" folder** (the words will fit into the colored regions therefore the background has to be white). The script will use the first image to mask the first conversation, the second with the second one and so on, if there aren't enough masks it will generate standard square wordclouds.
+	- Use large images (at least 1000px x 1000px)
 
 5. **Execute the file "whatsapp_wordcloud.py"** using python 3.5+ in your favorite IDE or with any of this commands in the terminal:
 	- python whatsapp_wordcloud.py
