@@ -63,7 +63,7 @@ class GroupedColorFunc(object):
         return self.get_color_func(word)(word, **kwargs)
 
 uninteresting_words_en = {"media", "omitted", "a", "pm", "was", "at", "her", "of", "also", "although", "with",  "is", "as", "by", "an", "the", "for", "and", "nor", "but", "or", "yet", "and", "so","on", "in", "to", "since", "for", "ago", "before", "past", "I", "me", "he", "she", "herself", "you", "it", "that", "they", "each", "few", "many", "who", "whoever", "whose", "someone", "everybody"}
-uninteresting_words_es = {"voy", "anda", "tengo", "hago", "iba", "aquí", "tiene", "tienes", "misma", "cada", "solo", "pasó", "esa", "q", "vez", "ud", "esto", "tal", "ella", "allá", "dió", "soy", "queda", "va", "van", "media", "omitted", "muy", "acá", "mismo", "hiciste", "has", "estuvo", "tuyo", "ah", "da", "ti", "mis", "mi", "tus", "ay", "sus", "su", "aún", "cómo", "donde", "dónde", "vas", "cuál", "estuve", "otras", "ahí", "tuya", "estas", "hubiera", "mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
+uninteresting_words_es = {"message", "deleted", "mensaje", "eliminado", "dan", "tener", "cual", "ser", "esas", "debe", "hacer", "además", "ademas", "también", "v", "estaba", "podría", "puede", "voy", "anda", "tengo", "hago", "iba", "aquí", "tiene", "tienes", "misma", "cada", "solo", "pasó", "esa", "q", "vez", "ud", "esto", "tal", "ella", "allá", "dió", "soy", "queda", "va", "van", "media", "omitted", "muy", "acá", "mismo", "hiciste", "has", "estuvo", "tuyo", "ah", "da", "ti", "mis", "mi", "tus", "ay", "sus", "su", "aún", "cómo", "donde", "dónde", "vas", "cuál", "estuve", "otras", "ahí", "tuya", "estas", "hubiera", "mi", "hay", "fue","están", "he", "ha", "del", "al", "eso", "era", "ese", "esta", "son", "uno", "qué", "está", "nequi", "sí", "si", "no", "les", "es", "pm", "am", "un", "una", "unos", "unas", "el", "los", "la", "las", "lo", "le", "y", "e", "ni", "que", "pero", "mas", "más", "aunque", "sino", "siquiera", "o", "u", "otra", "sea", "ya", "este", "aquél", "aquel", "pues", "porque", "puesto", "que", "como", "así", "asi", "luego", "tan", "tanto", "conque", "a", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "durante", "en" , "entre", "hacia", "hasta", "mediante", "para", "por", "según", "segun", "sin", "so", "sobre", "tras", "versus", "vía", "via", "yo", "tú", "tu", "él", "usted", "ustedes", "nosotros", "nosotras", "vosotros", "vosotras", "ellos", "ellas", "me", "te", "nos", "se"}
 
 uninteresting_words_list = uninteresting_words_es
 
@@ -84,7 +84,7 @@ def contact_text_separator(whatsapp_chat_path: str) -> dict:
     with open(whatsapp_chat_path, "r", encoding="utf8") as source_file:
 
         for line in source_file:
-            matched_contact = re.match(r"^\d+/\d+/\d{2}, \d+:\d+ .*? - (.*?): (.*)\n?", line)    # Match contact name in group 1 and what they said in group 2
+            matched_contact = re.match(r"^\d+/\d+/\d+, \d+:\d+ .*? - (.*?): (.*)\n?", line)    # Match contact name in group 1 and what they said in group 2
             if matched_contact is not None:
                 # Add contact to dictionary if it isn't there already
                 cotact_name = matched_contact[1]
@@ -259,6 +259,7 @@ def main():
     image_mask_files = file_finder("image masks", (".jpg", ".jpeg"))
     
     for file_index, [_, whatsapp_text_path] in enumerate(whatsapp_text_files):
+        print(f"\nProccesing chat #{file_index+1}\n")
         contact_speech_separated = contact_text_separator(whatsapp_text_path)
         colorgroup = colorgroup_generator(contact_speech_separated)
         counted_words = word_counter(colorgroup)
@@ -292,7 +293,8 @@ def main():
         wordcloud_file_name = ""
         contact_patches = []
         for contact_name, contact_color in zip(contact_speech_separated, colorgroup):
-            wordcloud_file_name += "-"+contact_name
+            if len(wordcloud_file_name) <= 20:
+                wordcloud_file_name += "-"+contact_name
             contact_patches.append(mpatches.Patch(color=contact_color, label=contact_name))
         
         plt.legend(handles=contact_patches)
